@@ -23,7 +23,7 @@ jobs:
           base_uri: https://ast.checkmarx.net
           cx_tenant: sonype-01
           cx_client_id: Test-Github-Suramya
-          cx_client_secret: ${{ secrets.CX_CLIENT_SECRET }}
+          cx_client_secret: kAmCLxJ69sKmdw01fibmSoxmAow9giZC
           project_name: ${{ github.repository }}
           branch: ${{ github.ref }}
           additional_params: --report-format sarif --output-path .
