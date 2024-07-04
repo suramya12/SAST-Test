@@ -6,29 +6,30 @@ on:
       - master
       - dev
 
+permissions:
+  security-events: write
+  contents: read
+
 jobs:
-  build:
+  checkmarx-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      
+        uses: actions/checkout@v3
+
       - name: Checkmarx AST Github Action
         uses: Checkmarx/ast-github-action@2.0.23
         with:
           base_uri: https://ast.checkmarx.net
           cx_tenant: sonype-01
           cx_client_id: Test-Github-Suramya
-          cx_client_secret: kAmCLxJ69sKmdw01fibmSoxmAow9giZC
+          cx_client_secret: ${{ secrets.CX_CLIENT_SECRET }}
           project_name: ${{ github.repository }}
-          branch: ${{ github.head_ref || github.ref }}
-          github_token: ${{ github.token }}
+          branch: ${{ github.ref }}
           additional_params: --report-format sarif --output-path .
-          repo_name: ${{ github.event.repository.name }}
-          namespace: ${{ github.repository_owner }}
-          pr_number: ${{ github.event.number }}
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v2
-        with:
+        with: 
+          # Path to SARIF file relative to the root of the repository
           sarif_file: cx_result.sarif
